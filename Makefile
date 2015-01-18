@@ -7,7 +7,7 @@ install: fmt
 	go install ./...
 
 clean:
-	rm -rf hostdir release whitepaper.aux whitepaper.log whitepaper.pdf         \
+	rm -rf hostdir release whitepaper.aux whitepaper.log whitepaper.pdf \
 		sia.wallet sia/test.wallet sia/hostdir* sia/renterDownload
 
 test: clean install
@@ -30,11 +30,11 @@ dependencies:
 	go get -u github.com/agl/ed25519
 	go get -u golang.org/x/crypto/twofish
 
-# Cross Compile - makes binaries for windows, linux, and mac, 32 and 64 bit.
+# Cross Compile - makes binaries for windows, linux, and mac
 xc:
 	go get -u github.com/laher/goxc
-	goxc -arch="amd64" -bc="linux windows darwin" -d=release -pv=0.2.0          \
-		-br=developer -pr=beta -include=style/,example-config,LICENSE*,README*  \
+	goxc -arch="amd64" -bc="linux windows darwin" -d=release -pv=0.2.0 \
+		-pr=beta -include=style/,example-config,LICENSE*,README* \
 		-tasks-=deb,deb-dev,deb-source -build-tags=release
 
 .PHONY: all fmt install test test-long test-long-race whitepaper dependencies distribution clean xc
