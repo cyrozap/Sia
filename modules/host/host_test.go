@@ -23,13 +23,16 @@ var (
 type HostTester struct {
 	*consensus.ConsensusTester
 	*Host
+
+	netAddr network.Address
 }
 
 // CreateHostTester initializes a HostTester.
 func CreateHostTester(t *testing.T) (ht *HostTester) {
 	ct := consensus.NewTestingEnvironment(t)
 
-	tcps, err := network.NewTCPServer(":" + strconv.Itoa(tcpsPort))
+	ipAddress := ":" + strconv.Itoa(tcpsPort)
+	tcps, err := network.NewTCPServer(ipAddress)
 	tcpsPort++
 	if err != nil {
 		t.Fatal(err)
@@ -53,8 +56,15 @@ func CreateHostTester(t *testing.T) (ht *HostTester) {
 	}
 	hostNum++
 
+	// Register RetrieveFile as an RPC to do an upload test.
+	err = tcps.RegisterRPC("RetrieveFile", h.RetrieveFile)
+	if err != nil {
+		t.Fatal(err)
+	}
+
 	ht = new(HostTester)
 	ht.ConsensusTester = ct
 	ht.Host = h
+	ht.netAddr = network.Address(ipAddress)
 	return
 }

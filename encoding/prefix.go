@@ -33,12 +33,12 @@ func ReadObject(r io.Reader, obj interface{}, maxLen uint64) error {
 	return Unmarshal(data, obj)
 }
 
-// WritePrefix prepends data with a 4-byte length before writing it.
+// WritePrefix prepends data with a 8-byte length before writing it.
 func WritePrefix(w io.Writer, data []byte) (int, error) {
 	return w.Write(append(EncUint64(uint64(len(data))), data...))
 }
 
-// WriteObject encodes an object and prepends it with a 4-byte length before
+// WriteObject encodes an object and prepends it with a 8-byte length before
 // writing it.
 func WriteObject(w io.Writer, obj interface{}) (int, error) {
 	return WritePrefix(w, Marshal(obj))
